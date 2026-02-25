@@ -1,6 +1,7 @@
 from django.db import models
 from organization.models import Organization
 from user.models import User
+from .choices import PROJECT_PERMISSIONS_OPTIONS, DOCUMENT_PERMISSIONS_OPTIONS
 
 
 class Project(models.Model):
@@ -9,12 +10,13 @@ class Project(models.Model):
     user permissions assigned via ProjectPermissions.
     """
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     is_active= models.BooleanField(default=True)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at= models.DateTimeField(auto_now=True)
+
+    organization = models.ForeignKey("organization.Organization", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -25,12 +27,13 @@ class Document(models.Model):
     assigned via DocumentPermissions.
     """
 
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
     is_active= models.BooleanField(default=True)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at= models.DateTimeField(auto_now=True)
+
+    project = models.ForeignKey("Project", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -40,35 +43,30 @@ class ProjectPermissions(models.Model):
     Through model for user–project access. Links a user to a project with
     a permission level: add, remove, or all.
     """
-
-    PROJECT_PERMISSIONS_OPTIONS= [("add","Add"), ("remove","Remove"), ("all","All")]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
     permissions = models.CharField(choices=PROJECT_PERMISSIONS_OPTIONS,max_length=6)
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at= models.DateTimeField(auto_now=True)
 
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE)
+    project = models.ForeignKey("Project", on_delete=models.CASCADE)
+
     def __str__(self):
-        return self.user.username + " - " + self.project.name
+        return self.user + " - " + self.project.name
 
 class DocumentPermissions(models.Model):
     """
     Through model for user–document access. Links a user to a document with
     a permission level: read, write, or all.
-    """
-
-    DOCUMENT_PERMISSIONS_OPTIONS= [("read","Read"), ("write","Write"), ("all","All")]
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    document = models.ForeignKey(Document, on_delete=models.CASCADE)
+    """    
     permissions = models.CharField(choices=DOCUMENT_PERMISSIONS_OPTIONS,max_length=5)
     created_at= models.DateTimeField(auto_now_add=True)
     updated_at= models.DateTimeField(auto_now=True)
 
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE)
+    document = models.ForeignKey("Document", on_delete=models.CASCADE)
+
     def __str__(self):
-        return self.user.username + " - " + self.document.name
+        return self.user + " - " + self.document.name
     
     class Meta:
         ordering = ['-created_at']
-        

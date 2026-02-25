@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .userManager import UserManager
-from organization.models import Organization
+from .choices import USER_ROLE_OPTIONS
 
 
 class User(AbstractUser):
@@ -10,17 +10,16 @@ class User(AbstractUser):
     and has a role (admin, manager, or user) within that organization.
     """
 
-    USER_ROLE_OPTIONS = [("admin","Admin"),('manager','Manager'), ("user","User")]
-
     email = models.EmailField(unique=True)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     role = models.CharField(choices=USER_ROLE_OPTIONS,max_length=7)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = 'email'
+    organization = models.ForeignKey("organization.Organization", on_delete=models.CASCADE)
+
+    USERNAME_FIELD = "email"
     username = None 
     objects = UserManager()
     REQUIRED_FIELDS = []
