@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Silk profiling (debug only) – middleware at top to capture full request/response
+# Silk profiling (debug only)
 if DEBUG:
     INSTALLED_APPS += ['silk']
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
