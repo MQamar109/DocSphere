@@ -1,10 +1,12 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .userManager import UserManager
+from django.db import models
+
+from core.models import TimeStamp
 from .choices import USER_ROLE_OPTIONS
+from .userManager import UserManager
 
 
-class User(AbstractUser):
+class User(TimeStamp, AbstractUser):
     """
     Custom user model child of AbstractUser. Authenticates with email, belongs to one organization,
     and has a role (admin, manager, or user) within that organization.
@@ -13,15 +15,14 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    role = models.CharField(choices=USER_ROLE_OPTIONS,max_length=7)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
+    role = models.CharField(choices=USER_ROLE_OPTIONS, max_length=7)
     organization = models.ForeignKey("organization.Organization", on_delete=models.CASCADE)
 
     USERNAME_FIELD = "email"
-    username = None 
+    EMAIL_FIELD = "email"
+    username = None
     objects = UserManager()
+
     REQUIRED_FIELDS = []
 
     def __str__(self):
