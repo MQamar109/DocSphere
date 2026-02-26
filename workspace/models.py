@@ -47,6 +47,9 @@ class ProjectPermissions(TimeStamp):
 
     def __str__(self):
         return f"{self.user} - {self.project.name}"
+    
+    class Meta:
+        ordering = ['-created_at']
 
 class DocumentPermissions(TimeStamp):
     """

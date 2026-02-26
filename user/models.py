@@ -16,6 +16,7 @@ class User(TimeStamp, AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     role = models.CharField(choices=USER_ROLE_OPTIONS, max_length=7)
+    
     organization = models.ForeignKey("organization.Organization", on_delete=models.CASCADE)
 
     USERNAME_FIELD = "email"
