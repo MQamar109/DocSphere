@@ -1,45 +1,48 @@
 from django.db import models
 
-from core.models import TimeStamp
+from core.models import BaseModel
 from .choices import PROJECT_PERMISSIONS_OPTIONS, DOCUMENT_PERMISSIONS_OPTIONS
 
 
-class Project(TimeStamp):
+class ProjectDocumentBase(BaseModel):
     """
-    A project belonging to an organization. Contains documents and can have
-    user permissions assigned via ProjectPermissions.
+    Abstract base model for project and document models. Contains name and description.
     """
 
     name = models.CharField(max_length=50)
     description = models.TextField(null=True, blank=True)
-    is_active= models.BooleanField(default=True)
+
+    class Meta:
+        abstract = True
+    
+class Project(ProjectDocumentBase):
+    """
+    A project belonging to an organization. Contains documents and can have
+    user permissions assigned via ProjectPermissions.
+    """
 
     organization = models.ForeignKey("organization.Organization", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
-class Document(TimeStamp):
+class Document(ProjectDocumentBase):
     """
     A document within a project. Can have user-level permissions
     assigned via DocumentPermissions.
     """
-
-    name = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
-    is_active= models.BooleanField(default=True)
 
     project = models.ForeignKey("Project", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
-class ProjectPermissions(TimeStamp):
+class ProjectPermissions(BaseModel):
     """
     Through model for user–project access. Links a user to a project with
     a permission level: add, remove, or all.
     """
-
+    
     permissions = models.CharField(choices=PROJECT_PERMISSIONS_OPTIONS, max_length=6)
 
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
@@ -49,14 +52,14 @@ class ProjectPermissions(TimeStamp):
         return f"{self.user} - {self.project.name}"
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created']
 
-class DocumentPermissions(TimeStamp):
+class DocumentPermissions(BaseModel):
     """
     Through model for user–document access. Links a user to a document with
     a permission level: read, write, or all.
-    """    
-
+    """
+    
     permissions = models.CharField(choices=DOCUMENT_PERMISSIONS_OPTIONS, max_length=5)
 
     user = models.ForeignKey("user.User", on_delete=models.CASCADE)
@@ -66,4 +69,4 @@ class DocumentPermissions(TimeStamp):
         return f"{self.user} - {self.document.name}"
     
     class Meta:
-        ordering = ['-created_at']
+        ordering = ['-created']

@@ -1,9 +1,8 @@
+from django_extensions.db.models import TimeStampedModel
 from django.db import models
 
-
-class TimeStamp(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
+class BaseModel(TimeStampedModel):
+    is_active = models.BooleanField(default=True)
+    
     class Meta:
         abstract = True
