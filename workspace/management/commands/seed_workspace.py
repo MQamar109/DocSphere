@@ -39,8 +39,9 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING("here is the data will be filled to the DB"))
             self.stdout.write(f"{self.seed_project(count)}")
             self.stdout.write(f"{self.seed_document(count)}")
-            self.stdout.write(f"{self.seed_project_permissions(count)}")
-            self.stdout.write(f"{self.seed_document_permissions(count)}")
+            self.stdout.write(
+                f"Would create {count} ProjectPermissions and {count} DocumentPermissions"
+            )
         else:
             Project.objects.bulk_create(self.seed_project(count))
             Document.objects.bulk_create(self.seed_document(count))

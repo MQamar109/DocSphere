@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--dry-run', action='store_true', help='Simulate the commands action')
-        parser.add_argument('-c', '--count', type=int, default=10, help = "Count of the rows to fill in the organization")
+        parser.add_argument('count', type=int, help = "Count of the rows to fill in the organization")
 
     def handle(self, *args, **options):
         dry_run = options['dry_run']
