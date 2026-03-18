@@ -4,15 +4,15 @@ from django.core.management.base import BaseCommand
 
 from organization.models import Organization
 from user.models import User
-from workspace.models import (
-    Project,
-    Document,
-    ProjectPermissions,
-    DocumentPermissions,
-)
 from workspace.choices import (
-    PROJECT_PERMISSIONS_OPTIONS,
     DOCUMENT_PERMISSIONS_OPTIONS,
+    PROJECT_PERMISSIONS_OPTIONS,
+)
+from workspace.models import (
+    Document,
+    DocumentPermissions,
+    Project,
+    ProjectPermissions,
 )
 
 
@@ -23,7 +23,10 @@ class Command(BaseCommand):
         parser.add_argument(
             "count",
             type=int,
-            help="Count of the rows to fill in the project and document",
+            help=(
+                "Count of the rows to fill in the project"
+                " and document"
+            ),
         )
         parser.add_argument(
             "--dry-run",
@@ -36,18 +39,42 @@ class Command(BaseCommand):
         dry_run = options["dry_run"]
 
         if dry_run:
-            self.stdout.write(self.style.WARNING("here is the data will be filled to the DB"))
-            self.stdout.write(f"{self.seed_project(count)}")
-            self.stdout.write(f"{self.seed_document(count)}")
             self.stdout.write(
-                f"Would create {count} ProjectPermissions and {count} DocumentPermissions"
+                self.style.WARNING(
+                    "here is the data will be filled"
+                    " to the DB"
+                )
+            )
+            self.stdout.write(
+                f"{self.seed_project(count)}"
+            )
+            self.stdout.write(
+                f"{self.seed_document(count)}"
+            )
+            self.stdout.write(
+                f"Would create {count} ProjectPermissions"
+                f" and {count} DocumentPermissions"
             )
         else:
-            Project.objects.bulk_create(self.seed_project(count))
-            Document.objects.bulk_create(self.seed_document(count))
-            ProjectPermissions.objects.bulk_create(self.seed_project_permissions(count))
-            DocumentPermissions.objects.bulk_create(self.seed_document_permissions(count))
-            self.stdout.write(self.style.SUCCESS(f"{count} records has been updated in project and document and added permissions"))
+            Project.objects.bulk_create(
+                self.seed_project(count)
+            )
+            Document.objects.bulk_create(
+                self.seed_document(count)
+            )
+            ProjectPermissions.objects.bulk_create(
+                self.seed_project_permissions(count)
+            )
+            DocumentPermissions.objects.bulk_create(
+                self.seed_document_permissions(count)
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"{count} records has been updated in"
+                    " project and document and added"
+                    " permissions"
+                )
+            )
 
     def seed_project(self, count):
         organization = Organization.objects.first()
@@ -78,7 +105,13 @@ class Command(BaseCommand):
             ProjectPermissions(
                 project=project,
                 user=user,
-                permissions=random.choice([choice[0] for choice in PROJECT_PERMISSIONS_OPTIONS]),
+                permissions=random.choice(
+                    [
+                        choice[0]
+                        for choice
+                        in PROJECT_PERMISSIONS_OPTIONS
+                    ]
+                ),
             )
             for i in range(count)
         ]
@@ -90,7 +123,13 @@ class Command(BaseCommand):
             DocumentPermissions(
                 document=document,
                 user=user,
-                permissions=random.choice([choice[0] for choice in DOCUMENT_PERMISSIONS_OPTIONS]),
+                permissions=random.choice(
+                    [
+                        choice[0]
+                        for choice
+                        in DOCUMENT_PERMISSIONS_OPTIONS
+                    ]
+                ),
             )
             for i in range(count)
         ]
