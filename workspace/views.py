@@ -5,18 +5,24 @@ from .models import Project, Document
 
 
 class ProjectListView(ListView):
+    """Display a list of all projects."""
+
     model = Project
     template_name = "project/project_list.html"
     context_object_name = "projects"
 
 
 class ProjectDetailView(DetailView):
+    """Display the details of a single project."""
+
     model = Project
     template_name = "project/project_detail.html"
     context_object_name = "project"
 
 
 class ProjectCreateView(CreateView):
+    """Handle creation of a new project."""
+
     model = Project
     template_name = "project/project_form.html"
     context_object_name = "project"
@@ -25,6 +31,8 @@ class ProjectCreateView(CreateView):
 
 
 class ProjectUpdateView(UpdateView):
+    """Handle updating an existing project."""
+
     model = Project
     template_name = "project/project_form.html"
     context_object_name = "project"
@@ -33,6 +41,8 @@ class ProjectUpdateView(UpdateView):
 
 
 class ProjectDeleteView(DeleteView):
+    """Handle deletion of a project with confirmation."""
+
     model = Project
     template_name = "project/project_confirm_delete.html"
     context_object_name = "project"
@@ -40,18 +50,24 @@ class ProjectDeleteView(DeleteView):
 
 
 class DocumentListView(ListView):
+    """Display a list of all documents."""
+
     model = Document
     template_name = "document/document_list.html"
     context_object_name = "documents"
 
 
 class DocumentDetailView(DetailView):
+    """Display the details of a single document."""
+
     model = Document
     template_name = "document/document_detail.html"
     context_object_name = "document"
 
 
 class DocumentCreateView(CreateView):
+    """Handle creation of a new document."""
+
     model = Document
     template_name = "document/document_form.html"
     context_object_name = "document"
@@ -60,6 +76,8 @@ class DocumentCreateView(CreateView):
 
 
 class DocumentUpdateView(UpdateView):
+    """Handle updating an existing document."""
+
     model = Document
     template_name = "document/document_form.html"
     context_object_name = "document"
@@ -68,6 +86,8 @@ class DocumentUpdateView(UpdateView):
 
 
 class DocumentDeleteView(DeleteView):
+    """Handle deletion of a document with confirmation."""
+
     model = Document
     template_name = "document/document_confirm_delete.html"
     context_object_name = "document"
