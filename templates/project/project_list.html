@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Management</p>
+    <h1>Projects</h1>
+    <p class="page-subtitle">
+      Manage all projects for your organizations.
+    </p>
+  </div>
+
+  <div class="page-actions">
+    <a href="{% url 'project-create' %}" class="btn btn-primary">+ Add Project</a>
+  </div>
+</section>
+
+{% if projects %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="docshpere-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Organization</th>
+          <th>Created</th>
+          <th>Last Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for project in projects %}
+        <tr>
+          <td>
+            <div class="cell-title">{{ project.name }}</div>
+          </td>
+          <td class="cell-description">
+            {{ project.description|default:"—" }}
+          </td>
+          <td>
+            {{ project.organization.name|default:"—" }}
+          </td>
+          <td>
+            <div>{{ project.created|date:"M d, Y" }}</div>
+            <span class="text-muted">{{ project.created|date:"H:i" }}</span>
+          </td>
+          <td>
+            <div>{{ project.modified|date:"M d, Y" }}</div>
+            <span class="text-muted">{{ project.modified|date:"H:i" }}</span>
+          </td>
+          <td>
+            <div class="table-actions">
+              <a class="btn btn-sm btn-secondary" href="{% url 'project-detail' project.pk %}">View</a>
+              <a class="btn btn-sm btn-secondary" href="{% url 'project-update' project.pk %}">Edit</a>
+              <a class="btn btn-sm btn-danger" href="{% url 'project-delete' project.pk %}">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="empty-card">
+  <h3>No projects found</h3>
+  <p>You haven’t added any projects yet.</p>
+</div>
+{% endif %}
+{% endblock %}

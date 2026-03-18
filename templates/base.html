@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Dashboard{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <div class="page-bg"></div>
+
+    <header class="ds-navbar">
+      <div class="ds-navbar-inner">
+        <div class="ds-navbar-brand">
+          <a href="{% url 'organization-list' %}">OrgPanel</a>
+        </div>
+
+        <div class="nav-options">
+          <nav class="ds-navbar-links">
+            <a href="{% url 'organization-list' %}">Organizations</a>
+          </nav>
+          <nav class="ds-navbar-links">
+            <a href="{% url 'users-list' %}">Users</a>
+          </nav>
+          <nav class="ds-navbar-links">
+            <a href="{% url 'project-list' %}">Projects</a>
+          </nav>
+          <nav class="ds-navbar-links">
+            <a href="{% url 'document-list' %}">Documents</a>
+          </nav>
+          {% if user.is_authenticated %}
+          <form
+            method="post"
+            class="ds-logout-button"
+            action="{% url 'logout' %}"
+          >
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-secondary">
+              Logout
+            </button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main class="ds-main">
+      <div class="page-shell">{% block content %}{% endblock %}</div>
+    </main>
+  </body>
+</html>

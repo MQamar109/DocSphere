@@ -1,0 +1,459 @@
+:root {
+  --bg: #0f172a;
+  --bg-soft: #111827;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-strong: #ffffff;
+  --border: rgba(148, 163, 184, 0.2);
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --danger: #dc2626;
+  --danger-hover: #b91c1c;
+  --success-bg: #dcfce7;
+  --success-text: #166534;
+  --danger-bg: #fee2e2;
+  --danger-text: #991b1b;
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.18);
+  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.1);
+  --radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(99, 102, 241, 0.22),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(56, 189, 248, 0.16),
+      transparent 25%
+    ),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+}
+
+a {
+  text-decoration: none;
+}
+
+.page-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.35) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), transparent 75%);
+  z-index: 0;
+}
+
+.ds-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(16px);
+  background: rgba(15, 23, 42, 0.72);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ds-navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-options {
+  display: flex;
+  gap: 4px;
+}
+
+.ds-navbar-brand a {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+.ds-navbar-links {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.ds-navbar-links a {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 500;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  transition: 0.25s ease;
+}
+
+.ds-navbar-links a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.ds-main {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.page-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.page-subtitle {
+  margin: 0.65rem 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.card,
+.form-card,
+.empty-card {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+
+.card,
+.form-card {
+  padding: 1.25rem;
+}
+
+.empty-card {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.empty-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.empty-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.1rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), #6366f1);
+  color: white;
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.28);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--primary-hover), #4f46e5);
+}
+
+.btn-secondary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--danger), #ef4444);
+  color: white;
+  box-shadow: 0 10px 25px rgba(220, 38, 38, 0.2);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, var(--danger-hover), #dc2626);
+}
+
+.btn-sm {
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+}
+
+.text-muted {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.modern-form p {
+  margin-bottom: 1.1rem;
+}
+
+.modern-form label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.modern-form input,
+.modern-form textarea,
+.modern-form select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid #dbe2ea;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.modern-form input:focus,
+.modern-form textarea:focus,
+.modern-form select:focus {
+  border-color: rgba(79, 70, 229, 0.55);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+.modern-form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-actions,
+.page-actions,
+.detail-footer {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .ds-navbar-inner,
+  .page-shell {
+    width: 100%;
+  }
+
+  .ds-main {
+    padding: 1.5rem 1rem 3rem;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+}
+
+/* === Shared table & detail styles (moved from organization.css for global use) === */
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.docshpere-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 900px;
+}
+
+.ds-logout-button {
+  margin-top: 10px;
+}
+
+.docshpere-table thead th {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  background: #f8fafc;
+  padding: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.docshpere-table thead th:first-child {
+  border-top-left-radius: 14px;
+}
+
+.docshpere-table thead th:last-child {
+  border-top-right-radius: 14px;
+}
+
+.docshpere-table tbody tr {
+  transition:
+    transform 0.15s ease,
+    background 0.2s ease;
+}
+
+.docshpere-table tbody tr:hover {
+  background: rgba(79, 70, 229, 0.04);
+}
+
+.docshpere-table td,
+.docshpere-table tbody th {
+  padding: 1rem;
+  border-bottom: 1px solid #eef2f7;
+  vertical-align: middle;
+  color: #1e293b;
+  text-align: center;
+}
+
+.docshpere-table tbody tr:last-child td,
+.docshpere-table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.cell-title {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.cell-description {
+  max-width: 260px;
+  white-space: normal;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.user-table {
+  width: 100%;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.badge-active {
+  background: var(--success-bg);
+  color: var(--success-text);
+}
+
+.badge-inactive {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.code-pill {
+  display: inline-block;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.detail-card {
+  padding: 1.2rem;
+}
+
+.detail-table {
+  min-width: 100%;
+}
+
+.detail-table th {
+  width: 220px;
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+}
+
+.detail-footer {
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .docshpere-table {
+    min-width: 760px;
+  }
+}
