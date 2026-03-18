@@ -15,6 +15,7 @@ from organization.serializers import OrganizationSerializer
 
 @api_view(["GET", "POST"])
 def list_create_organization(request):
+    """List organizations with optional search/status filtering, or create a new one."""
     if request.method == "GET":
         organizations = Organization.objects.all()
         search = request.query_params.get("search")
@@ -52,6 +53,7 @@ def list_create_organization(request):
 
 @api_view(["GET", "PATCH", "DELETE"])
 def retrieve_partial_update_delete(request, pk):
+    """Retrieve, partially update, or delete a single organization by pk."""
     try:
         instance = Organization.objects.get(id=pk)
     except Organization.DoesNotExist:

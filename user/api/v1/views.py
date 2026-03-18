@@ -20,7 +20,10 @@ from user.serializers import (
 
 
 class ListCreateUserAPIView(APIView):
+    """List active users with optional search, or create a new user."""
+
     def get(self, request):
+        """Return a filtered list of active users, searchable by email or name."""
         users = User.objects.prefetch_related(
             'project_permissions__project',
             'document_permissions__document'
@@ -38,6 +41,7 @@ class ListCreateUserAPIView(APIView):
         return Response(serializer.data, status=HTTP_200_OK)
 
     def post(self, request):
+        """Create a new user from the provided request data."""
         serializer = CreateUserSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -51,7 +55,10 @@ class ListCreateUserAPIView(APIView):
 
 
 class RetrieveUpdateDeleteUserAPIView(APIView):
+    """Retrieve, partially update, or soft-delete a single user."""
+
     def get_object(self, pk):
+        """Fetch a user by pk with prefetched permissions, or raise 404."""
         return get_object_or_404(
             User.objects.prefetch_related(
                 'project_permissions__project',
@@ -61,11 +68,13 @@ class RetrieveUpdateDeleteUserAPIView(APIView):
         )
 
     def get(self, request, pk):
+        """Return the serialized detail of a single user."""
         user = self.get_object(pk)
         serializer = ListDetailUserSerializer(user)
         return Response(serializer.data, status=HTTP_200_OK)
 
     def patch(self, request, pk):
+        """Partially update a user's fields."""
         user = self.get_object(pk)
         serializer = UpdateUserSerializer(
             user, data=request.data, partial=True
@@ -82,6 +91,7 @@ class RetrieveUpdateDeleteUserAPIView(APIView):
         )
 
     def delete(self, request, pk):
+        """Soft-delete a user by deactivating their account."""
         user = self.get_object(pk)
         user.is_active = False
         user.save()
@@ -89,7 +99,10 @@ class RetrieveUpdateDeleteUserAPIView(APIView):
 
 
 class CurrentUserDetailAPIView(APIView):
+    """Return the profile of the currently authenticated user."""
+
     def get(self, request):
+        """Return the current user's details, or 401 if unauthenticated."""
         user = request.user
         if user.is_authenticated:
             user = User.objects.prefetch_related(

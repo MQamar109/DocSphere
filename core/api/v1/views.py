@@ -17,7 +17,10 @@ from core.serializers import SignupSerializer, LoginSerializer
 
 
 class SignupView(APIView):
+    """Register a new user and return JWT tokens upon successful creation."""
+
     def post(self, request):
+        """Validate signup data, create the user, authenticate, and return access/refresh tokens."""
         serializer = SignupSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -41,9 +44,12 @@ class SignupView(APIView):
 
 
 class LoginView(APIView):
+    """Authenticate a user with email/password and return JWT tokens."""
+
     permission_classes = [AllowAny]
 
     def post(self, request):
+        """Validate credentials, check active status, and return access/refresh tokens."""
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data["email"]
@@ -79,7 +85,10 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """Blacklist the provided refresh token to log the user out."""
+
     def post(self, request):
+        """Accept a refresh token and blacklist it, invalidating the session."""
         refresh_token = request.data.get("refresh")
         if not refresh_token:
             return Response({"errors": ""})

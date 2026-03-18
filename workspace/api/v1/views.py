@@ -7,6 +7,8 @@ from workspace.serializers import ProjectSerializer, DocumentSerializer
 
 
 class ProjectListCreateView(ListCreateAPIView):
+    """List all projects with search/filter support, or create a new project."""
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
@@ -15,11 +17,15 @@ class ProjectListCreateView(ListCreateAPIView):
 
 
 class ProjectRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    """Retrieve, update, or delete a single project by its primary key."""
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
 
 class DocumentListCreateView(ListCreateAPIView):
+    """List all documents with search/filter support, or create a new document."""
+
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
     filter_backends = [SearchFilter, DjangoFilterBackend]
@@ -28,5 +34,7 @@ class DocumentListCreateView(ListCreateAPIView):
 
 
 class DocumentRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView):
+    """Retrieve, update, or delete a single document by its primary key."""
+
     queryset = Document.objects.all()
     serializer_class = DocumentSerializer
