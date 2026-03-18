@@ -60,7 +60,7 @@ class ProjectPermissions(BaseModel):
     )
 
     user = models.ForeignKey(
-        "user.User", on_delete=models.CASCADE
+        "user.User", on_delete=models.CASCADE, related_name='project_permissions'
     )
     project = models.ForeignKey(
         "Project", on_delete=models.CASCADE
@@ -84,7 +84,7 @@ class DocumentPermissions(BaseModel):
     )
 
     user = models.ForeignKey(
-        "user.User", on_delete=models.CASCADE
+        "user.User", on_delete=models.CASCADE, related_name='document_permissions'
     )
     document = models.ForeignKey(
         "Document", on_delete=models.CASCADE

@@ -11,7 +11,6 @@ from django.views.generic import (
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from organization.models import Organization
 from user.forms.UserForm import UserCreateForm, UserUpdateForm
 from user.models import User
 from workspace.models import ProjectPermissions, DocumentPermissions
