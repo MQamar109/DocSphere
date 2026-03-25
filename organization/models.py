@@ -12,7 +12,7 @@ class Organization(BaseModel):
 
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(null=True, blank=True)
-    slug = models.SlugField(unique=True, blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
         return self.name
