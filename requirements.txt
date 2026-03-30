@@ -1,0 +1,7 @@
+asgiref==3.11.*
+Django==6.0.*
+django-silk==5.4.*
+gprof2dot==2025.4.*
+psycopg2-binary==2.9.*
+sqlparse==0.5.*
+python-dotenv==1.2.*
