@@ -1,20 +1,15 @@
 from django import forms
 
 from organization.models import Organization
+from user.choices import UserRole
 from user.models import User
 from workspace.models import Project, Document
-
-ROLE_CHOICES = [
-    ('user', 'User'),
-    ('manager', 'Manager'),
-    ('admin', 'Admin'),
-]
 
 
 class UserCreateForm(forms.ModelForm):
     """Used only for creating a user."""
 
-    role = forms.ChoiceField(choices=ROLE_CHOICES)
+    role = forms.ChoiceField(choices=UserRole.choices)
 
     organization = forms.ModelChoiceField(
         queryset=Organization.objects.all()
@@ -47,7 +42,7 @@ class UserCreateForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     """Used for updating a user."""
 
-    role = forms.ChoiceField(choices=ROLE_CHOICES)
+    role = forms.ChoiceField(choices=UserRole.choices)
 
     organization = forms.ModelChoiceField(
         queryset=Organization.objects.all()
@@ -94,3 +89,4 @@ class UserUpdateForm(forms.ModelForm):
                     documentpermissions__user=self.instance
                 ).distinct()
             )
+   
