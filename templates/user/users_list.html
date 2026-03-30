@@ -10,7 +10,7 @@
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'user-create' %}" class="btn btn-primary">+ Add User</a>
+    <a href="{% url 'user_create' %}" class="btn btn-primary">+ Add User</a>
   </div>
 </section>
 
@@ -40,9 +40,9 @@
           <td>{{ user.document_count }}</td>
           <td>
             <div class="table-actions">
-              <a class="btn btn-sm btn-secondary" href="{% url 'user-detail' user.pk %}">View</a>
-              <a class="btn btn-sm btn-secondary" href="{% url 'user-update' user.pk %}">Edit</a>
-              <a class="btn btn-sm btn-danger" href="{% url 'user-delete' user.pk %}">Delete</a>
+              <a class="btn btn-sm btn-secondary" href="{% url 'user_detail' user.pk %}">View</a>
+              <a class="btn btn-sm btn-secondary" href="{% url 'user_update' user.pk %}">Edit</a>
+              <a class="btn btn-sm btn-danger" href="{% url 'user_delete' user.pk %}">Delete</a>
             </div>
           </td>
         </tr>

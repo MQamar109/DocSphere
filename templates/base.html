@@ -16,21 +16,21 @@
     <header class="ds-navbar">
       <div class="ds-navbar-inner">
         <div class="ds-navbar-brand">
-          <a href="{% url 'organization-list' %}">OrgPanel</a>
+          <a href="{% url 'organization_list' %}">OrgPanel</a>
         </div>
 
         <div class="nav-options">
           <nav class="ds-navbar-links">
-            <a href="{% url 'organization-list' %}">Organizations</a>
+            <a href="{% url 'organization_list' %}">Organizations</a>
           </nav>
           <nav class="ds-navbar-links">
-            <a href="{% url 'users-list' %}">Users</a>
+            <a href="{% url 'users_list' %}">Users</a>
           </nav>
           <nav class="ds-navbar-links">
-            <a href="{% url 'project-list' %}">Projects</a>
+            <a href="{% url 'project_list' %}">Projects</a>
           </nav>
           <nav class="ds-navbar-links">
-            <a href="{% url 'document-list' %}">Documents</a>
+            <a href="{% url 'document_list' %}">Documents</a>
           </nav>
           {% if user.is_authenticated %}
           <form

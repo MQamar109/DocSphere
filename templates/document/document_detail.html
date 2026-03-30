@@ -10,8 +10,8 @@
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'document-update' document.pk %}" class="btn btn-primary">Edit</a>
-    <a href="{% url 'document-delete' document.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'document_update' document.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'document_delete' document.pk %}" class="btn btn-danger">Delete</a>
   </div>
 </section>
 
@@ -42,7 +42,7 @@
   </table>
 
   <div class="detail-footer">
-    <a href="{% url 'document-list' %}" class="btn btn-secondary">← Back to list</a>
+    <a href="{% url 'document_list' %}" class="btn btn-secondary">← Back to list</a>
   </div>
 </div>
 {% endblock %}

@@ -6,7 +6,7 @@ class CustomLoginView(LoginView):
     """Handle user authentication and login."""
 
     template_name = 'registration/login.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
 
 
 class CustomLogoutView(LogoutView):

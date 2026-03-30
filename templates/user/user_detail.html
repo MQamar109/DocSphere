@@ -8,8 +8,8 @@
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'user-update' user.pk %}" class="btn btn-primary">Edit</a>
-    <a href="{% url 'user-delete' user.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'user_update' user.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'user_delete' user.pk %}" class="btn btn-danger">Delete</a>
   </div>
 </section>
 
@@ -36,7 +36,7 @@
         <th>Projects</th>
         <td>
           {% for project in projects %}
-          <a href="{% url 'project-detail' project.project.pk %}"
+          <a href="{% url 'project_detail' project.project.pk %}"
             >{{ project.project.name }}</a
           >, {% endfor %}
         </td>
@@ -45,7 +45,7 @@
         <th>Documents</th>
         <td>
           {% for document in documents %}
-          <a href="{% url 'document-detail' document.document.pk %}"
+          <a href="{% url 'document_detail' document.document.pk %}"
             >{{ document.document.name }}</a
           >, {% endfor %}
         </td>
@@ -54,7 +54,7 @@
   </table>
 
   <div class="detail-footer">
-    <a href="{% url 'users-list' %}" class="btn btn-secondary"
+    <a href="{% url 'users_list' %}" class="btn btn-secondary"
       >← Back to list</a
     >
   </div>

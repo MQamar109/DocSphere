@@ -13,26 +13,26 @@ urlpatterns = [
     path(
         'list/',
         OrganizationListView.as_view(),
-        name='organization-list',
+        name='organization_list',
     ),
     path(
         'create/',
         OrganizationCreateView.as_view(),
-        name='organization-create',
+        name='organization_create',
     ),
     path(
         'detail/<int:pk>/',
         OrganizationDetailView.as_view(),
-        name='organization-detail',
+        name='organization_detail',
     ),
     path(
         'update/<int:pk>/',
         OrganizationUpdateView.as_view(),
-        name='organization-update',
+        name='organization_update',
     ),
     path(
         'delete/<int:pk>/',
         OrganizationDeleteView.as_view(),
-        name='organization-delete',
+        name='organization_delete',
     ),
 ]

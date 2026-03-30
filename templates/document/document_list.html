@@ -12,7 +12,7 @@
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'document-create' %}" class="btn btn-primary">+ Add Document</a>
+    <a href="{% url 'document_create' %}" class="btn btn-primary">+ Add Document</a>
   </div>
 </section>
 
@@ -52,9 +52,9 @@
           </td>
           <td>
             <div class="table-actions">
-              <a class="btn btn-sm btn-secondary" href="{% url 'document-detail' document.pk %}">View</a>
-              <a class="btn btn-sm btn-secondary" href="{% url 'document-update' document.pk %}">Edit</a>
-              <a class="btn btn-sm btn-danger" href="{% url 'document-delete' document.pk %}">Delete</a>
+              <a class="btn btn-sm btn-secondary" href="{% url 'document_detail' document.pk %}">View</a>
+              <a class="btn btn-sm btn-secondary" href="{% url 'document_update' document.pk %}">Edit</a>
+              <a class="btn btn-sm btn-danger" href="{% url 'document_delete' document.pk %}">Delete</a>
             </div>
           </td>
         </tr>

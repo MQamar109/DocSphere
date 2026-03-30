@@ -56,7 +56,7 @@ class UserCreateView(CreateView):
 
     model = User
     template_name = 'user/user_form.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
     form_class = UserCreateForm
 
 
@@ -66,7 +66,7 @@ class UserUpdateView(UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = 'user/user_form.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
 
     def form_valid(self, form):
         """Save the user and create any newly assigned project/document permissions."""
@@ -104,7 +104,7 @@ class UserDeleteView(DeleteView):
 
     model = User
     template_name = 'user/user_delete_confirm.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
 
     def delete(self, request, *args, **kwargs):
         """Soft-delete the user by setting is_active to False instead of removing the record."""

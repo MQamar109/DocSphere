@@ -27,7 +27,7 @@ class ProjectCreateView(CreateView):
     template_name = "project/project_form.html"
     context_object_name = "project"
     fields = ["name", "description", "organization"]
-    success_url = reverse_lazy("project-list")
+    success_url = reverse_lazy("project_list")
 
 
 class ProjectUpdateView(UpdateView):
@@ -37,7 +37,7 @@ class ProjectUpdateView(UpdateView):
     template_name = "project/project_form.html"
     context_object_name = "project"
     fields = ["name", "description", "organization"]
-    success_url = reverse_lazy("project-list")
+    success_url = reverse_lazy("project_list")
 
 
 class ProjectDeleteView(DeleteView):
@@ -46,7 +46,7 @@ class ProjectDeleteView(DeleteView):
     model = Project
     template_name = "project/project_confirm_delete.html"
     context_object_name = "project"
-    success_url = reverse_lazy("project-list")
+    success_url = reverse_lazy("project_list")
 
 
 class DocumentListView(ListView):
@@ -72,7 +72,7 @@ class DocumentCreateView(CreateView):
     template_name = "document/document_form.html"
     context_object_name = "document"
     fields = ["name", "description", "project"]
-    success_url = reverse_lazy("document-list")
+    success_url = reverse_lazy("document_list")
 
 
 class DocumentUpdateView(UpdateView):
@@ -82,7 +82,7 @@ class DocumentUpdateView(UpdateView):
     template_name = "document/document_form.html"
     context_object_name = "document"
     fields = ["name", "description", "project"]
-    success_url = reverse_lazy("document-list")
+    success_url = reverse_lazy("document_list")
 
 
 class DocumentDeleteView(DeleteView):
@@ -91,4 +91,4 @@ class DocumentDeleteView(DeleteView):
     model = Document
     template_name = "document/document_confirm_delete.html"
     context_object_name = "document"
-    success_url = reverse_lazy("document-list")
+    success_url = reverse_lazy("document_list")

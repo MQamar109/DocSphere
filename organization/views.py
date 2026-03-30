@@ -33,7 +33,7 @@ class OrganizationCreateView(CreateView):
     template_name = 'organization/organization_form.html'
     context_object_name = 'organization'
     fields = ['name', 'description']
-    success_url = reverse_lazy('organization-list')
+    success_url = reverse_lazy('organization_list')
 
 
 class OrganizationUpdateView(UpdateView):
@@ -43,7 +43,7 @@ class OrganizationUpdateView(UpdateView):
     template_name = 'organization/organization_form.html'
     context_object_name = 'organization'
     fields = ['name', 'description']
-    success_url = reverse_lazy('organization-list')
+    success_url = reverse_lazy('organization_list')
 
 
 class OrganizationDeleteView(DeleteView):
@@ -52,4 +52,4 @@ class OrganizationDeleteView(DeleteView):
     model = Organization
     template_name = 'organization/organization_confirm_delete.html'
     context_object_name = 'organization'
-    success_url = reverse_lazy('organization-list')
+    success_url = reverse_lazy('organization_list')

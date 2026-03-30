@@ -10,8 +10,8 @@
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'organization-update' organization.pk %}" class="btn btn-primary">Edit</a>
-    <a href="{% url 'organization-delete' organization.pk %}" class="btn btn-danger">Delete</a>
+    <a href="{% url 'organization_update' organization.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'organization_delete' organization.pk %}" class="btn btn-danger">Delete</a>
   </div>
 </section>
 
@@ -52,7 +52,7 @@
   </table>
 
   <div class="detail-footer">
-    <a href="{% url 'organization-list' %}" class="btn btn-secondary">← Back to list</a>
+    <a href="{% url 'organization_list' %}" class="btn btn-secondary">← Back to list</a>
   </div>
 </div>
 {% endblock %}
