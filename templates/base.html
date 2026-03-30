@@ -13,6 +13,7 @@
   <body>
     <div class="page-bg"></div>
 
+    {% block navbar %}
     <header class="ds-navbar">
       <div class="ds-navbar-inner">
         <div class="ds-navbar-brand">
@@ -47,6 +48,7 @@
         </div>
       </div>
     </header>
+    {% endblock %}
 
     <main class="ds-main">
       <div class="page-shell">{% block content %}{% endblock %}</div>

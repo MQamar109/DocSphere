@@ -337,6 +337,57 @@ h1 {
   margin-top: 1.5rem;
 }
 
+.auth-shell {
+  min-height: calc(100vh - 200px);
+  display: grid;
+  place-items: center;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-subtitle {
+  margin: 0.65rem 0 1.4rem;
+  color: var(--muted);
+}
+
+.auth-form .form-field {
+  margin-bottom: 1rem;
+}
+
+.auth-alert {
+  margin: 0 0 1rem;
+  padding: 0.8rem 0.9rem;
+  border-radius: 12px;
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+}
+
+.auth-alert p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.field-error {
+  margin: 0.45rem 0 0;
+  color: var(--danger-text);
+  font-size: 0.84rem;
+}
+
+.auth-submit {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 768px) {
   .ds-navbar-inner,
   .page-shell {
@@ -358,6 +409,10 @@ h1 {
   .search-input {
     min-width: 0;
     width: 100%;
+  }
+
+  .auth-card {
+    padding: 1.35rem;
   }
 }
 
