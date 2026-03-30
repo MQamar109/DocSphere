@@ -1,5 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.db.models import Q
 
 from .models import Project, Document
 
@@ -10,6 +11,22 @@ class ProjectListView(ListView):
     model = Project
     template_name = "project/project_list.html"
     context_object_name = "projects"
+
+    def get_queryset(self):
+        queryset = Project.objects.select_related("organization")
+        search_query = self.request.GET.get("q", "").strip()
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query)
+                | Q(description__icontains=search_query)
+                | Q(organization__name__icontains=search_query)
+            )
+        return queryset.order_by("-created")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
 
 
 class ProjectDetailView(DetailView):
@@ -55,6 +72,22 @@ class DocumentListView(ListView):
     model = Document
     template_name = "document/document_list.html"
     context_object_name = "documents"
+
+    def get_queryset(self):
+        queryset = Document.objects.select_related("project")
+        search_query = self.request.GET.get("q", "").strip()
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query)
+                | Q(description__icontains=search_query)
+                | Q(project__name__icontains=search_query)
+            )
+        return queryset.order_by("-created")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
 
 
 class DocumentDetailView(DetailView):

@@ -89,4 +89,3 @@ class UserUpdateForm(forms.ModelForm):
                     documentpermissions__user=self.instance
                 ).distinct()
             )
-   

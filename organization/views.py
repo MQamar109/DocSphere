@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.db.models import Q
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -16,6 +17,22 @@ class OrganizationListView(ListView):
     model = Organization
     template_name = 'organization/organization_list.html'
     context_object_name = 'organizations'
+
+    def get_queryset(self):
+        queryset = Organization.objects.all()
+        search_query = self.request.GET.get('q', '').strip()
+        if search_query:
+            queryset = queryset.filter(
+                Q(name__icontains=search_query)
+                | Q(description__icontains=search_query)
+                | Q(slug__icontains=search_query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '').strip()
+        return context
 
 
 class OrganizationDetailView(DetailView):

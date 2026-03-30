@@ -35,3 +35,6 @@ class User(AbstractUser, BaseModel):
             f"{self.first_name} {self.last_name}".strip()
             or self.email
         )
+    
+    class Meta:
+        ordering = ['-created']

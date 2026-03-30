@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -26,10 +27,25 @@ class UserListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         """Return active users annotated with project and document counts."""
-        return User.objects.filter(is_active=True).annotate(
+        queryset = User.objects.filter(is_active=True).annotate(
             project_count=Count('projectpermissions'),
-            document_count=Count('projectpermissions'),
+            document_count=Count('documentpermissions'),
         )
+        search_query = self.request.GET.get('q', '').strip()
+        if search_query:
+            queryset = queryset.filter(
+                Q(email__icontains=search_query)
+                | Q(first_name__icontains=search_query)
+                | Q(last_name__icontains=search_query)
+                | Q(organization__name__icontains=search_query)
+                | Q(role__icontains=search_query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '').strip()
+        return context
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
