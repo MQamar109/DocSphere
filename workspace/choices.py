@@ -1,3 +1,6 @@
+from django.db import models
+
+
 class ProjectPermissions(models.TextChoices):
     ADD = "add", "Add"
     REMOVE = "remove", "Remove"
