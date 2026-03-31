@@ -27,8 +27,8 @@ class UserListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         """Return active users annotated with project and document counts."""
         queryset = User.objects.filter(is_active=True).annotate(
-            project_count=Count('projectpermissions'),
-            document_count=Count('documentpermissions'),
+            project_count=Count('project_permissions'),
+            document_count=Count('document_permissions'),
         )
         search_query = self.request.GET.get('q', '').strip()
         if search_query:
