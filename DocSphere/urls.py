@@ -20,8 +20,8 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('silk/', include('silk.urls', namespace='silk')),
-    path('core/', include('core.urls')),
-    path('organization/', include('organization.urls')),
-    path('user/', include('user.urls')),
-    path('workspace/', include('workspace.urls')),
+    path('api/v1/core/', include('core.urls')),
+    path('api/v1/organization/', include('organization.urls')),
+    path('api/v1/user/', include('user.urls')),
+    path('api/v1/workspace/', include('workspace.urls')),
 ]
