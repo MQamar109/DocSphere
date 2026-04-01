@@ -16,12 +16,12 @@ urlpatterns = [
     path(
         '',
         list_create_organization,
-        name='organization-list-create',
+        name='organization_list_create',
     ),
     path(
         '<int:pk>/',
         retrieve_partial_update_delete,
-        name='retrieve-partial-update-delete',
+        workname='organization_retrieve_partial_update_delete',
     ),
     path(
         'list/',

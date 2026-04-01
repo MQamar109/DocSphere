@@ -12,6 +12,13 @@ from .views import (
     DocumentUpdateView,
     DocumentDeleteView,
 )
+from workspace.api.v1.views import (
+    ProjectListCreateAPIView,
+    ProjectRetrieveUpdateDestroyAPIView,
+    DocumentListCreateAPIView,
+    DocumentRetrieveUpdateDestroyAPIView,
+)
+
 
 urlpatterns = [
     # Project URLs
@@ -27,4 +34,10 @@ urlpatterns = [
     path("documents/<int:pk>/", DocumentDetailView.as_view(), name="document_detail"),
     path("documents/<int:pk>/update/", DocumentUpdateView.as_view(), name="document_update"),
     path("documents/<int:pk>/delete/", DocumentDeleteView.as_view(), name="document_delete"),
+
+    # DRF API URLs for both
+    path("api/projects/", ProjectListCreateAPIView.as_view(), name="api_project_list_create"),
+    path("api/projects/<int:pk>/", ProjectRetrieveUpdateDestroyAPIView.as_view(), name="api_project_detail"),
+    path("api/documents/", DocumentListCreateAPIView.as_view(), name="api_document_list_create"),
+    path("api/documents/<int:pk>/", DocumentRetrieveUpdateDestroyAPIView.as_view(), name="api_document_detail"),
 ]
