@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from core.models import BaseModel
-from .choices import USER_ROLE_OPTIONS
+from .choices import UserRole
 from .userManager import UserManager
 
 
@@ -15,14 +15,12 @@ class User(AbstractUser, BaseModel):
 
     email = models.EmailField(unique=True)
     role = models.CharField(
-        choices=USER_ROLE_OPTIONS, max_length=7, default="user"
+        choices=UserRole.choices, max_length=7, default=UserRole.USER
     )
 
     organization = models.ForeignKey(
         "organization.Organization",
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
     )
 
     USERNAME_FIELD = "email"
@@ -37,3 +35,6 @@ class User(AbstractUser, BaseModel):
             f"{self.first_name} {self.last_name}".strip()
             or self.email
         )
+    
+    class Meta:
+        ordering = ['-created']

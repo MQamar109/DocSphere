@@ -6,13 +6,26 @@
   <div>
     <p class="eyebrow">Management</p>
     <h1>Documents</h1>
-    <p class="page-subtitle">
-      Manage all documents across projects.
-    </p>
+    <p class="page-subtitle">Manage all documents across projects.</p>
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'document-create' %}" class="btn btn-primary">+ Add Document</a>
+    <form method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="Search documents..."
+        class="search-input"
+      />
+      <button type="submit" class="btn btn-secondary">Search</button>
+      {% if search_query %}
+      <a href="{% url 'document_list' %}" class="btn btn-secondary">Clear</a>
+      {% endif %}
+    </form>
+    <a href="{% url 'document_create' %}" class="btn btn-primary"
+      >+ Add Document</a
+    >
   </div>
 </section>
 
@@ -39,9 +52,7 @@
           <td class="cell-description">
             {{ document.description|default:"—" }}
           </td>
-          <td>
-            {{ document.project.name|default:"—" }}
-          </td>
+          <td>{{ document.project.name|default:"—" }}</td>
           <td>
             <div>{{ document.created|date:"M d, Y" }}</div>
             <span class="text-muted">{{ document.created|date:"H:i" }}</span>
@@ -52,9 +63,21 @@
           </td>
           <td>
             <div class="table-actions">
-              <a class="btn btn-sm btn-secondary" href="{% url 'document-detail' document.pk %}">View</a>
-              <a class="btn btn-sm btn-secondary" href="{% url 'document-update' document.pk %}">Edit</a>
-              <a class="btn btn-sm btn-danger" href="{% url 'document-delete' document.pk %}">Delete</a>
+              <a
+                class="btn btn-sm btn-secondary"
+                href="{% url 'document_detail' document.pk %}"
+                >View</a
+              >
+              <a
+                class="btn btn-sm btn-secondary"
+                href="{% url 'document_update' document.pk %}"
+                >Edit</a
+              >
+              <a
+                class="btn btn-sm btn-danger"
+                href="{% url 'document_delete' document.pk %}"
+                >Delete</a
+              >
             </div>
           </td>
         </tr>

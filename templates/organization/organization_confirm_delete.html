@@ -12,7 +12,7 @@ organization.name }}{% endblock %} {% block content %}
   <form method="post">
     {% csrf_token %}
     <button class="btn btn-sm btn-danger" type="submit">Yes, delete</button>
-    <a href="{% url 'organization-list' %}">Cancel</a>
+    <a href="{% url 'organization_list' %}">Cancel</a>
   </form>
 </div>
 {% endblock %}
