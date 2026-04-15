@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Delete Document · {{ document.name }}{% endblock %}
+
+{% block content %}
+<div class="">
+  <h1>Delete Document</h1>
+
+  <p>
+    Are you sure you want to delete the document "<strong>{{ document.name }}</strong>"?
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button class="btn btn-sm btn-danger" type="submit">Yes, delete</button>
+    <a href="{% url 'document_list' %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}

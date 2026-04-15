@@ -1,7 +1,12 @@
 asgiref==3.11.*
 Django==6.0.*
+django-environ==0.13.*
+django-extensions==4.1
 django-silk==5.4.*
+djangorestframework==3.16.*
+djangorestframework_simplejwt==5.5.*
 gprof2dot==2025.4.*
 psycopg2-binary==2.9.*
-sqlparse==0.5.*
+PyJWT==2.12.*
 python-dotenv==1.2.*
+sqlparse==0.5.*

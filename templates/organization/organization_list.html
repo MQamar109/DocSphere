@@ -1,0 +1,111 @@
+{% extends 'base.html' %} {% block title %}Organizations{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Management</p>
+    <h1>Organizations</h1>
+    <p class="page-subtitle">
+      Manage all organizations in one clean dashboard.
+    </p>
+  </div>
+
+  <div class="page-actions">
+    <form method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="Search organizations..."
+        class="search-input"
+      />
+      <button type="submit" class="btn btn-secondary">Search</button>
+      {% if search_query %}
+      <a href="{% url 'organization_list' %}" class="btn btn-secondary"
+        >Clear</a
+      >
+      {% endif %}
+    </form>
+    <a href="{% url 'organization_create' %}" class="btn btn-primary"
+      >+ Add Organization</a
+    >
+  </div>
+</section>
+
+{% if organizations %}
+<div class="card">
+  <div class="table-responsive">
+    <table class="docshpere-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Slug</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th>Last Updated</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for organization in organizations %}
+        <tr>
+          <td>
+            <div class="cell-title">{{ organization.name }}</div>
+          </td>
+          <td class="cell-description">
+            {{ organization.description|default:"—" }}
+          </td>
+          <td>
+            <span class="code-pill">{{ organization.slug|default:"—" }}</span>
+          </td>
+          <td>
+            {% if organization.is_active %}
+            <span class="badge badge-active">Active</span>
+            {% else %}
+            <span class="badge badge-inactive">Inactive</span>
+            {% endif %}
+          </td>
+          <td>
+            <div>{{ organization.created|date:"M d, Y" }}</div>
+            <span class="text-muted"
+              >{{ organization.created|date:"H:i" }}</span
+            >
+          </td>
+          <td>
+            <div>{{ organization.modified|date:"M d, Y" }}</div>
+            <span class="text-muted"
+              >{{ organization.modified|date:"H:i" }}</span
+            >
+          </td>
+          <td>
+            <div class="table-actions">
+              <a
+                class="btn btn-sm btn-secondary"
+                href="{% url 'organization_detail' organization.pk %}"
+                >View</a
+              >
+              <a
+                class="btn btn-sm btn-secondary"
+                href="{% url 'organization_update' organization.pk %}"
+                >Edit</a
+              >
+              <a
+                class="btn btn-sm btn-danger"
+                href="{% url 'organization_delete' organization.pk %}"
+                >Delete</a
+              >
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="empty-card">
+  <h3>No organizations found</h3>
+  <p>You haven’t added any organizations yet.</p>
+</div>
+{% endif %}
+{% endblock %}

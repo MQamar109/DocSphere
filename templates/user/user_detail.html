@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block title %}User · {{ user.email }}{% endblock %}
+{% block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">User Details</p>
+    <h1>{{ user.first_name|default:user.email }} {{ user.last_name }}</h1>
+    <p class="page-subtitle">View user information and related resources.</p>
+  </div>
+
+  <div class="page-actions">
+    <a href="{% url 'user_update' user.pk %}" class="btn btn-primary">Edit</a>
+    <a href="{% url 'user_delete' user.pk %}" class="btn btn-danger">Delete</a>
+  </div>
+</section>
+
+<div class="card detail-card">
+  <table class="organization-table detail-table">
+    <tbody>
+      <tr>
+        <th>Email</th>
+        <td>{{ user.email }}</td>
+      </tr>
+      <tr>
+        <th>First name</th>
+        <td>{{ user.first_name|default:"—" }}</td>
+      </tr>
+      <tr>
+        <th>Last name</th>
+        <td>{{ user.last_name|default:"—" }}</td>
+      </tr>
+      <tr>
+        <th>Organization</th>
+        <td>{{ user.organization.name|default:"—" }}</td>
+      </tr>
+      <tr>
+        <th>Projects</th>
+        <td>
+          {% for project in projects %}
+          <a href="{% url 'project_detail' project.project.pk %}"
+            >{{ project.project.name }}</a
+          >, {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <th>Documents</th>
+        <td>
+          {% for document in documents %}
+          <a href="{% url 'document_detail' document.document.pk %}"
+            >{{ document.document.name }}</a
+          >, {% endfor %}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="detail-footer">
+    <a href="{% url 'users_list' %}" class="btn btn-secondary"
+      >← Back to list</a
+    >
+  </div>
+</div>
+{% endblock %}
