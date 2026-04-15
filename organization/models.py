@@ -12,6 +12,7 @@ class Organization(BaseModel):
 
     name = models.CharField(max_length=50, unique=True)
     description = models.TextField(null=True, blank=True)
+    admin_email = models.EmailField(unique=True)
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
