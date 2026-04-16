@@ -1,5 +1,9 @@
 from django.urls import path
 
+from organization.api.v1.views import (
+    list_create_organization,
+    retrieve_partial_update_delete,
+)
 from organization.views import (
     OrganizationCreateView,
     OrganizationDeleteView,
@@ -8,8 +12,17 @@ from organization.views import (
     OrganizationUpdateView,
 )
 
-
 urlpatterns = [
+    path(
+        '',
+        list_create_organization,
+        name='organization_list_create',
+    ),
+    path(
+        '<int:pk>/',
+        retrieve_partial_update_delete,
+        workname='organization_retrieve_partial_update_delete',
+    ),
     path(
         'list/',
         OrganizationListView.as_view(),
