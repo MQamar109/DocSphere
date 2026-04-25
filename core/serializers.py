@@ -5,6 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 
 from user.models import User
+from organization.models import Organization
 
 
 class SignupSerializer(serializers.ModelSerializer):
@@ -36,3 +37,22 @@ class SignupSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
+
+
+class StripeCheckoutSerializer(serializers.Serializer):
+    organization = serializers.IntegerField()
+
+    def validate_organization(self, value):
+        try:
+            organization = Organization.objects.get(id=value)
+        except Organization.DoesNotExist:
+            raise ValidationError("Organization not found.")
+        except Exception as e:
+            raise ValidationError(str(e))
+
+        if not organization.is_active:
+            raise ValidationError("Organization is not active.")
+        if organization.has_active_subscription():
+            raise ValidationError("Organization already has an active subscription.")
+
+        return organization

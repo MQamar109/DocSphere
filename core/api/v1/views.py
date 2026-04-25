@@ -1,4 +1,7 @@
+import stripe
+from django.conf import settings
 from django.contrib.auth import authenticate
+from django.urls import reverse
 
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -13,11 +16,15 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from core.serializers import SignupSerializer, LoginSerializer
+from core.serializers import LoginSerializer, SignupSerializer, StripeCheckoutSerializer
+from djstripe.models import Customer
 
 
 class SignupView(APIView):
     """Register a new user and return JWT tokens upon successful creation."""
+
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
     def post(self, request):
         """Validate signup data, create the user, authenticate, and return access/refresh tokens."""
@@ -46,6 +53,7 @@ class SignupView(APIView):
 class LoginView(APIView):
     """Authenticate a user with email/password and return JWT tokens."""
 
+    authentication_classes = []
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -89,3 +97,35 @@ class LogoutView(APIView):
                 {"error": "Invalid token"},
                 status=HTTP_400_BAD_REQUEST,
             )
+
+
+class StripeCheckoutView(APIView):
+
+    def post(self, request):
+        stripe_secret_key = settings.STRIPE_TEST_SECRET_KEY
+        if not stripe_secret_key:
+            return Response(
+                {"error": "Stripe secret key is not configured."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+        stripe.api_key = stripe_secret_key
+
+        serializer = StripeCheckoutSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        organization = serializer.validated_data["organization"]
+
+        customer, created = Customer.get_or_create(subscriber=organization)
+
+        session = stripe.checkout.Session.create(
+            customer=customer.id,
+            payment_method_types=["card"],
+            line_items=[{
+                "price": settings.STRIPE_PRO_PRICE_ID,
+                "quantity": 1,
+            }],
+            mode="subscription",
+            success_url=request.build_absolute_uri(reverse("stripe_success")),
+            cancel_url=request.build_absolute_uri(reverse("stripe_cancel")),
+        )
+
+        return Response({'session_url': session.url}, status=HTTP_200_OK)

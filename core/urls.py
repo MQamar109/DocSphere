@@ -1,6 +1,11 @@
 from django.urls import path
 
-from core.api.v1.views import LoginView, LogoutView, SignupView
+from core.api.v1.views import (
+    LoginView,
+    LogoutView,
+    SignupView,
+    StripeCheckoutView,    
+)
 from core.views import CustomLoginView, CustomLogoutView
 
 
@@ -12,5 +17,7 @@ urlpatterns = [
     path('drf-login/', LoginView.as_view(), name='drf_login'),
     path('drf-logout/', LogoutView.as_view(), name='drf_logout'),
     path('drf-signup/', SignupView.as_view(), name='drf_signup'),
+    path('stripe-checkout/', StripeCheckoutView.as_view(), name='stripe_checkout'),
+    
 ]
 

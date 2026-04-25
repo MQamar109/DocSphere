@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block title %}Payment Successful{% endblock %} 
+{%block content %}
+<section class="page-header">
+  <div>
+    <p class="eyebrow">Billing</p>
+    <h1>Payment successful</h1>
+    <p class="page-subtitle">
+      Your subscription is active and premium features are now available.
+    </p>
+  </div>
+</section>
+
+<div class="card">
+  <p class="text-muted">
+    Thank you for your purchase. You can continue managing your workspace from
+    the dashboard.
+  </p>
+  <div class="form-actions">
+    <a href="{% url 'organization_list' %}" class="btn btn-primary"
+      >Go to Dashboard</a
+    >
+    <a href="{% url 'project_list' %}" class="btn btn-secondary"
+      >View Projects</a
+    >
+  </div>
+</div>
+{% endblock %}
