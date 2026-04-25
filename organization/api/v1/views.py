@@ -9,6 +9,11 @@ from rest_framework.status import (
     HTTP_404_NOT_FOUND,
 )
 
+from organization.cache import (
+    get_cached_organization,
+    get_cached_organization_list,
+    invalidate_organization_cache,
+)
 from organization.models import Organization
 from organization.serializers import OrganizationSerializer
 
@@ -17,9 +22,15 @@ from organization.serializers import OrganizationSerializer
 def list_create_organization(request):
     """List organizations with optional search/status filtering, or create a new one."""
     if request.method == "GET":
-        organizations = Organization.objects.all()
         search = request.query_params.get("search")
         status = request.query_params.get("status")
+
+        # Serve cached data only for the active list endpoint shape.
+        if not search and status == "active":
+            data = get_cached_organization_list()
+            return Response(data, status=HTTP_200_OK)
+
+        organizations = Organization.objects.all()
 
         if search:
             organizations = organizations.filter(
@@ -42,6 +53,7 @@ def list_create_organization(request):
 
         if serializer.is_valid():
             serializer.save()
+            invalidate_organization_cache(serializer.instance.id)
             return Response(
                 data=serializer.data, status=HTTP_201_CREATED
             )
@@ -60,10 +72,8 @@ def retrieve_partial_update_delete(request, pk):
         return Response(status=HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
-        serializer = OrganizationSerializer(instance)
-        return Response(
-            data=serializer.data, status=HTTP_200_OK
-        )
+        data = get_cached_organization(pk)
+        return Response(data=data, status=HTTP_200_OK)
 
     elif request.method == "PATCH":
         serializer = OrganizationSerializer(
@@ -72,6 +82,7 @@ def retrieve_partial_update_delete(request, pk):
 
         if serializer.is_valid():
             serializer.save()
+            invalidate_organization_cache(instance.id)
             return Response(
                 data=serializer.data, status=HTTP_200_OK
             )
@@ -81,6 +92,6 @@ def retrieve_partial_update_delete(request, pk):
         )
 
     elif request.method == "DELETE":
+        invalidate_organization_cache(instance.id)
         instance.delete()
-        instance.save()
         return Response(status=HTTP_204_NO_CONTENT)
