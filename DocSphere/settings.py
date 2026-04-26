@@ -30,18 +30,21 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 AUTH_USER_MODEL = 'user.User'
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'core',
     'organization',
     'user',
     'workspace',
     'rest_framework',
     'djstripe',
+    'chat',
 ]
 
 MIDDLEWARE = [
