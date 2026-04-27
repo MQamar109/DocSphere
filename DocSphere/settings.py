@@ -76,6 +76,7 @@ if DEBUG:
     MIDDLEWARE = ['silk.middleware.SilkyMiddleware'] + MIDDLEWARE
 
 ROOT_URLCONF = 'DocSphere.urls'
+ASGI_APPLICATION = "DocSphere.asgi.application"
 
 TEMPLATES = [
     {
