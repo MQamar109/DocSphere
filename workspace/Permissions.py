@@ -8,7 +8,11 @@ class UserProjectPermission(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if request.method in ['PATCH', 'DELETE']:
-            ProjectPermissions.objects.filter(user=request.user, project=obj, permissions__in=["all", "add"]).exists()
+            return ProjectPermissions.objects.filter(
+                user=request.user,
+                project=obj,
+                permissions__in=["all", "add"],
+            ).exists()
         return True
 
 class UserDocumentPermission(BasePermission):

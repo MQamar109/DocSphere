@@ -130,7 +130,13 @@ class UpdatePasswordAPIView(APIView):
         user = request.user
         if not user.check_password(serializer.validated_data["old_password"]):
             return Response({"error": "Old password is incorrect"}, status=HTTP_400_BAD_REQUEST)
-        
+
+        if user.check_password(serializer.validated_data["new_password"]):
+            return Response(
+                {"error": "New password cannot be the same as your current password."},
+                status=HTTP_400_BAD_REQUEST,
+            )
+
         user.set_password(serializer.validated_data["new_password"])
         user.save(update_fields=["password"])
         token = RefreshToken.for_user(user)

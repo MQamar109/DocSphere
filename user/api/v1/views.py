@@ -13,6 +13,7 @@ from rest_framework.status import (
 )
 from rest_framework.views import APIView
 
+from user.Permissions import IsSuperAdmin, IsAdminOrManager
 from user.models import User
 from user.serializers import (
     CreateUserSerializer,
@@ -28,8 +29,17 @@ from user.cache import (
 
 class UserListCreateAPIView(APIView):
     """List active users with optional search, or create a new user."""
+    permission_classes = [IsAdminOrManager]
 
     def get(self, request):
+        """Return active users in the current user's organization."""
+        users = User.objects.prefetch_related(
+            'project_permissions__project',
+            'document_permissions__document'
+            ).filter(
+                is_active=True,
+                organization=request.user.organization,
+            )
         search = request.query_params.get("search")
 
         if search:
@@ -61,6 +71,7 @@ class UserListCreateAPIView(APIView):
 
 
 class UserRetrieveUpdateDeleteUserAPIView(APIView):
+    permission_classes = [IsAdminOrManager]
     """Retrieve, partially update, or soft-delete a single user."""
 
     def get_object(self, pk):
@@ -101,8 +112,27 @@ class CurrentUserDetailAPIView(APIView):
     """Return the profile of the currently authenticated user."""
 
     def get(self, request):
-        if not request.user.is_authenticated:
-            return Response(status=HTTP_401_UNAUTHORIZED)
+        """Return the current user's details, or 401 if unauthenticated."""
+        user = request.user
+        if user.is_authenticated:
+            user = User.objects.prefetch_related(
+                'project_permissions__project',
+                'document_permissions__document',
+            ).get(pk=user.id)
+            serializer = ListDetailUserSerializer(user)
+            return Response(serializer.data, status=HTTP_200_OK)
+        return Response(status=HTTP_401_UNAUTHORIZED)
 
-        data = get_cached_user(request.user.id)
-        return Response(data, status=HTTP_200_OK)
+
+class AllUsersAPIView(APIView):
+    """Return all users across organizations."""
+
+    permission_classes = [IsSuperAdmin]
+
+    def get(self, request):
+        users = User.objects.prefetch_related(
+            'project_permissions__project',
+            'document_permissions__document',
+        ).all()
+        serializer = ListDetailUserSerializer(users, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
