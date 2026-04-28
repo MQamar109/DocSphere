@@ -19,7 +19,7 @@ from user.serializers import (
 )
 
 
-class ListCreateUserAPIView(APIView):
+class UserListCreateAPIView(APIView):
     """List active users with optional search, or create a new user."""
 
     def get(self, request):
@@ -54,7 +54,7 @@ class ListCreateUserAPIView(APIView):
         )
 
 
-class RetrieveUpdateDeleteUserAPIView(APIView):
+class UserRetrieveUpdateDeleteUserAPIView(APIView):
     """Retrieve, partially update, or soft-delete a single user."""
 
     def get_object(self, pk):

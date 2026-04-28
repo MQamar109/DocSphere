@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -17,23 +18,44 @@ from workspace.models import ProjectPermissions, DocumentPermissions
 
 
 class UserListView(LoginRequiredMixin, ListView):
+    """Display a list of all active users with their project and document counts."""
+
     model = User
     template_name = 'user/users_list.html'
     context_object_name = 'users'
 
     def get_queryset(self):
-        return User.objects.filter(is_active=True).annotate(
+        """Return active users annotated with project and document counts."""
+        queryset = User.objects.filter(is_active=True).annotate(
             project_count=Count('projectpermissions'),
-            document_count=Count('projectpermissions'),
+            document_count=Count('documentpermissions'),
         )
+        search_query = self.request.GET.get('q', '').strip()
+        if search_query:
+            queryset = queryset.filter(
+                Q(email__icontains=search_query)
+                | Q(first_name__icontains=search_query)
+                | Q(last_name__icontains=search_query)
+                | Q(organization__name__icontains=search_query)
+                | Q(role__icontains=search_query)
+            )
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.request.GET.get('q', '').strip()
+        return context
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
+    """Display a user's profile along with their project and document permissions."""
+
     model = User
     template_name = 'user/user_detail.html'
     context_object_name = 'user'
 
     def get_context_data(self, **kwargs):
+        """Enrich context with the user's project and document permissions."""
         context = super().get_context_data(**kwargs)
         context['projects'] = (
             ProjectPermissions.objects.filter(user=self.object)
@@ -45,19 +67,24 @@ class UserDetailView(LoginRequiredMixin, DetailView):
 
 
 class UserCreateView(CreateView):
+    """Handle creation of a new user account."""
+
     model = User
     template_name = 'user/user_form.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
     form_class = UserCreateForm
 
 
 class UserUpdateView(UpdateView):
+    """Handle updating user details and syncing project/document permissions."""
+
     model = User
     form_class = UserUpdateForm
     template_name = 'user/user_form.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
 
     def form_valid(self, form):
+        """Save the user and create any newly assigned project/document permissions."""
         response = super().form_valid(form)
 
         user = self.object
@@ -88,11 +115,14 @@ class UserUpdateView(UpdateView):
 
 
 class UserDeleteView(DeleteView):
+    """Handle soft-deletion of a user by deactivating their account."""
+
     model = User
     template_name = 'user/user_delete_confirm.html'
-    success_url = reverse_lazy('users-list')
+    success_url = reverse_lazy('users_list')
 
     def delete(self, request, *args, **kwargs):
+        """Soft-delete the user by setting is_active to False instead of removing the record."""
         user = self.get_object()
         user.is_active = False
         user.save()

@@ -151,9 +151,10 @@ SIMPLE_JWT = {
 
 
 LOGIN_REDIRECT_URL = '/api/v1/user/list/'
-LOGOUT_REDIRECT_URL = '/core/login/'
+LOGOUT_REDIRECT_URL = '/api/v1/core/login/'
 
-LOGIN_URL = '/core/login/'
+LOGIN_URL = '/api/v1/core/login/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'
+

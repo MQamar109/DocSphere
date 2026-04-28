@@ -16,36 +16,36 @@ urlpatterns = [
     path(
         '',
         list_create_organization,
-        name='organization-list-create',
+        name='organization_list_create',
     ),
     path(
         '<int:pk>/',
         retrieve_partial_update_delete,
-        name='retrieve-partial-update-delete',
+        workname='organization_retrieve_partial_update_delete',
     ),
     path(
         'list/',
         OrganizationListView.as_view(),
-        name='organization-list',
+        name='organization_list',
     ),
     path(
         'create/',
         OrganizationCreateView.as_view(),
-        name='organization-create',
+        name='organization_create',
     ),
     path(
         'detail/<int:pk>/',
         OrganizationDetailView.as_view(),
-        name='organization-detail',
+        name='organization_detail',
     ),
     path(
         'update/<int:pk>/',
         OrganizationUpdateView.as_view(),
-        name='organization-update',
+        name='organization_update',
     ),
     path(
         'delete/<int:pk>/',
         OrganizationDeleteView.as_view(),
-        name='organization-delete',
+        name='organization_delete',
     ),
 ]

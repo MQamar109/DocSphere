@@ -1,20 +1,15 @@
 from django import forms
 
 from organization.models import Organization
+from user.choices import UserRole
 from user.models import User
 from workspace.models import Project, Document
-
-ROLE_CHOICES = [
-    ('user', 'User'),
-    ('manager', 'Manager'),
-    ('admin', 'Admin'),
-]
 
 
 class UserCreateForm(forms.ModelForm):
     """Used only for creating a user."""
 
-    role = forms.ChoiceField(choices=ROLE_CHOICES)
+    role = forms.ChoiceField(choices=UserRole.choices)
 
     organization = forms.ModelChoiceField(
         queryset=Organization.objects.all()
@@ -47,7 +42,7 @@ class UserCreateForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     """Used for updating a user."""
 
-    role = forms.ChoiceField(choices=ROLE_CHOICES)
+    role = forms.ChoiceField(choices=UserRole.choices)
 
     organization = forms.ModelChoiceField(
         queryset=Organization.objects.all()
@@ -80,47 +75,8 @@ class UserUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        role = self.data.get("role") or getattr(
-            self.instance, "role", None
-        )
-        org_id = self.data.get("organization") or getattr(
-            self.instance, "organization_id", None
-        )
-
-        if (
-            hasattr(self.data, "getlist")
-            and self.data.getlist("projects")
-        ):
-            project_ids = self.data.getlist("projects")
-        else:
-            project_ids = []
-
-        if org_id:
-            self.fields["projects"].queryset = (
-                Project.objects.filter(organization_id=org_id)
-            )
-        else:
-            self.fields["projects"].queryset = (
-                Project.objects.all()
-            )
-
-        if role == "user":
-            self.fields["documents"].queryset = (
-                Document.objects.filter(project__isnull=True)
-            )
-        elif role in ["manager", "admin"]:
-            if project_ids:
-                self.fields["documents"].queryset = (
-                    Document.objects.filter(
-                        project_id__in=project_ids
-                    )
-                )
-            else:
-                self.fields["documents"].queryset = (
-                    Document.objects.filter(
-                        project__isnull=True
-                    )
-                )
+        self.fields["projects"].queryset = Project.objects.all()
+        self.fields["documents"].queryset = Document.objects.all()
 
         if self.instance and self.instance.pk:
             self.fields["projects"].initial = (
@@ -128,7 +84,6 @@ class UserUpdateForm(forms.ModelForm):
                     projectpermissions__user=self.instance
                 ).distinct()
             )
-
             self.fields["documents"].initial = (
                 Document.objects.filter(
                     documentpermissions__user=self.instance

@@ -2,8 +2,8 @@ from django.db import models
 
 from core.models import BaseModel
 from .choices import (
-    PROJECT_PERMISSIONS_OPTIONS,
-    DOCUMENT_PERMISSIONS_OPTIONS,
+    ProjectPermissions,
+    DocumentPermissions,
 )
 
 
@@ -56,7 +56,7 @@ class ProjectPermissions(BaseModel):
     """
 
     permissions = models.CharField(
-        choices=PROJECT_PERMISSIONS_OPTIONS, max_length=6
+        choices=ProjectPermissions.choices, max_length=6
     )
 
     user = models.ForeignKey(
@@ -80,7 +80,7 @@ class DocumentPermissions(BaseModel):
     """
 
     permissions = models.CharField(
-        choices=DOCUMENT_PERMISSIONS_OPTIONS, max_length=5
+        choices=DocumentPermissions.choices, max_length=5
     )
 
     user = models.ForeignKey(

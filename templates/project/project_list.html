@@ -6,13 +6,26 @@
   <div>
     <p class="eyebrow">Management</p>
     <h1>Projects</h1>
-    <p class="page-subtitle">
-      Manage all projects for your organizations.
-    </p>
+    <p class="page-subtitle">Manage all projects for your organizations.</p>
   </div>
 
   <div class="page-actions">
-    <a href="{% url 'project-create' %}" class="btn btn-primary">+ Add Project</a>
+    <form method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        value="{{ search_query }}"
+        placeholder="Search projects..."
+        class="search-input"
+      />
+      <button type="submit" class="btn btn-secondary">Search</button>
+      {% if search_query %}
+      <a href="{% url 'project_list' %}" class="btn btn-secondary">Clear</a>
+      {% endif %}
+    </form>
+    <a href="{% url 'project_create' %}" class="btn btn-primary"
+      >+ Add Project</a
+    >
   </div>
 </section>
 
@@ -39,9 +52,7 @@
           <td class="cell-description">
             {{ project.description|default:"—" }}
           </td>
-          <td>
-            {{ project.organization.name|default:"—" }}
-          </td>
+          <td>{{ project.organization.name|default:"—" }}</td>
           <td>
             <div>{{ project.created|date:"M d, Y" }}</div>
             <span class="text-muted">{{ project.created|date:"H:i" }}</span>
@@ -52,9 +63,21 @@
           </td>
           <td>
             <div class="table-actions">
-              <a class="btn btn-sm btn-secondary" href="{% url 'project-detail' project.pk %}">View</a>
-              <a class="btn btn-sm btn-secondary" href="{% url 'project-update' project.pk %}">Edit</a>
-              <a class="btn btn-sm btn-danger" href="{% url 'project-delete' project.pk %}">Delete</a>
+              <a
+                class="btn btn-sm btn-secondary"
+                href="{% url 'project_detail' project.pk %}"
+                >View</a
+              >
+              <a
+                class="btn btn-sm btn-secondary"
+                href="{% url 'project_update' project.pk %}"
+                >Edit</a
+              >
+              <a
+                class="btn btn-sm btn-danger"
+                href="{% url 'project_delete' project.pk %}"
+                >Delete</a
+              >
             </div>
           </td>
         </tr>

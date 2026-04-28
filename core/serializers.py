@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
+
 from user.models import User
 
 
@@ -9,8 +12,14 @@ class SignupSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
 
     def validate(self, attrs):
-        if attrs["password"].strip() != attrs["confirm_password"].strip():
+        if attrs["password"] != attrs["confirm_password"]:
             raise ValidationError("Password and confirm password are not equal")
+
+        try:
+            validate_password(attrs["password"])
+        except DjangoValidationError as exc:
+            raise ValidationError({"password": list(exc.messages)})
+
         return attrs
 
     def create(self, validated_data):
@@ -27,4 +36,3 @@ class SignupSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-
