@@ -76,6 +76,12 @@ class SetResetPasswordSerializer(serializers.Serializer):
 class PasswordResetEmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
+    def validate_email(self, value):
+        user = User.objects.filter(email=value).first()
+        if not user or not user.is_active:
+            raise ValidationError("User not found.")
+        return value
+
 
 class StripeCheckoutSerializer(serializers.Serializer):
     organization = serializers.IntegerField()
