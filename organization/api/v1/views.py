@@ -1,5 +1,6 @@
 from django.db.models import Q
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import (
     HTTP_200_OK,
@@ -10,10 +11,12 @@ from rest_framework.status import (
 )
 
 from organization.models import Organization
+from organization.permissions import IsSuperAdmin
 from organization.serializers import OrganizationSerializer
 
 
 @api_view(["GET", "POST"])
+@permission_classes([IsSuperAdmin])
 def list_create_organization(request):
     """List organizations with optional search/status filtering, or create a new one."""
     if request.method == "GET":
@@ -52,6 +55,7 @@ def list_create_organization(request):
 
 
 @api_view(["GET", "PATCH", "DELETE"])
+@permission_classes([IsSuperAdmin])
 def retrieve_partial_update_delete(request, pk):
     """Retrieve, partially update, or delete a single organization by pk."""
     try:
