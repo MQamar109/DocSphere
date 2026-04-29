@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import Organization
-from core.email_service import send_email_using_default_email
+from core.email_service import send_email
 
 
 @receiver(post_save, sender=Organization)
@@ -26,4 +26,4 @@ def send_organization_created_email(sender, instance, created, **kwargs):
         "</body></html>"
     )
 
-    send_email_using_default_email(instance.admin_email, subject, message, html_message)
+    send_email(instance.admin_email, subject, message, html_message)

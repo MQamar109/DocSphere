@@ -9,8 +9,8 @@ from rest_framework.status import (
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
     HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
 )
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
 from user.Permissions import IsSuperAdmin, IsAdminOrManager
@@ -110,18 +110,17 @@ class UserRetrieveUpdateDeleteUserAPIView(APIView):
 
 class CurrentUserDetailAPIView(APIView):
     """Return the profile of the currently authenticated user."""
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        """Return the current user's details, or 401 if unauthenticated."""
+        """Return the current user's details."""
         user = request.user
-        if user.is_authenticated:
-            user = User.objects.prefetch_related(
-                'project_permissions__project',
-                'document_permissions__document',
-            ).get(pk=user.id)
-            serializer = ListDetailUserSerializer(user)
-            return Response(serializer.data, status=HTTP_200_OK)
-        return Response(status=HTTP_401_UNAUTHORIZED)
+        user = User.objects.prefetch_related(
+            'project_permissions__project',
+            'document_permissions__document',
+        ).get(pk=user.id)
+        serializer = ListDetailUserSerializer(user)
+        return Response(serializer.data, status=HTTP_200_OK)
 
 
 class AllUsersAPIView(APIView):

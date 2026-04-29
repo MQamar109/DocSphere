@@ -184,24 +184,49 @@ EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
 
 #cache settings
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_CACHE_DB = os.getenv("REDIS_CACHE_DB", "1")
+REDIS_BROKER_DB = os.getenv("REDIS_BROKER_DB", "2")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+REDIS_KEY_PREFIX = os.getenv("REDIS_KEY_PREFIX", "docsphere")
+REDIS_CACHE_TIMEOUT = int(os.getenv("REDIS_CACHE_TIMEOUT", "300"))
+REDIS_MAX_CONNECTIONS = int(os.getenv("REDIS_MAX_CONNECTIONS", "50"))
+
+if REDIS_PASSWORD:
+    REDIS_CACHE_LOCATION = os.getenv(
+        "REDIS_CACHE_LOCATION",
+        f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_CACHE_DB}",
+    )
+    DEFAULT_CELERY_BROKER_URL = (
+        f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_BROKER_DB}"
+    )
+else:
+    REDIS_CACHE_LOCATION = os.getenv(
+        "REDIS_CACHE_LOCATION",
+        f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_CACHE_DB}",
+    )
+    DEFAULT_CELERY_BROKER_URL = (
+        f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BROKER_DB}"
+    )
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",  
+        "LOCATION": REDIS_CACHE_LOCATION,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "PASSWORD": "your-redis-password",     
             "CONNECTION_POOL_KWARGS": {
-                "max_connections": 50,
+                "max_connections": REDIS_MAX_CONNECTIONS,
             },
         },
-        "KEY_PREFIX": "docsphere",     
-        "TIMEOUT": 300,            
+        "KEY_PREFIX": REDIS_KEY_PREFIX,
+        "TIMEOUT": REDIS_CACHE_TIMEOUT,
     }
 }
 
 # ── Celery ────────────────────────────────────────────────────
-CELERY_BROKER_URL = "redis://127.0.0.1:6379/2"   # db=2 — separate from cache
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", DEFAULT_CELERY_BROKER_URL)
 CELERY_RESULT_BACKEND = "django-db"               # store results in postgres
 CELERY_CACHE_BACKEND = "django-cache"
 
