@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'organization',
     'user',
     'workspace',
-    'rest_framework'
+    'rest_framework',
+    'djstripe',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,12 @@ LOGIN_REDIRECT_URL = '/api/v1/user/list/'
 LOGOUT_REDIRECT_URL = '/api/v1/core/login/'
 
 LOGIN_URL = '/api/v1/core/login/'
+
+# Stripe settings
+STRIPE_LIVE_MODE = False  # True in production
+STRIPE_TEST_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_TEST_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+DJSTRIPE_WEBHOOK_SECRET = os.getenv("DJSTRIPE_WEBHOOK_SECRET")
+STRIPE_PRO_PRICE_ID = os.getenv("STRIPE_PRO_PRICE_ID")
+DJSTRIPE_SUBSCRIBER_MODEL = "organization.Organization"
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"

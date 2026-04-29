@@ -16,12 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from core.views import StripeCancelView, StripeSuccessView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('silk/', include('silk.urls', namespace='silk')),
+    path('success/', StripeSuccessView.as_view(), name='stripe_success'),
+    path('cancel/', StripeCancelView.as_view(), name='stripe_cancel'),
     path('api/v1/core/', include('core.urls')),
     path('api/v1/organization/', include('organization.urls')),
     path('api/v1/user/', include('user.urls')),
     path('api/v1/workspace/', include('workspace.urls')),
+    
+    path('stripe/', include('djstripe.urls', namespace='djstripe')),
 ]
