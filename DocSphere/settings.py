@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+from celery.schedules import crontab
 
 from dotenv import load_dotenv
 
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
     'workspace',
     'rest_framework',
     'djstripe',
+    "django_celery_beat",      
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -179,6 +182,73 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
+
+#cache settings
+REDIS_HOST = os.getenv("REDIS_HOST", "redis")
+REDIS_PORT = os.getenv("REDIS_PORT", "6379")
+REDIS_CACHE_DB = os.getenv("REDIS_CACHE_DB", "1")
+REDIS_BROKER_DB = os.getenv("REDIS_BROKER_DB", "2")
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+REDIS_KEY_PREFIX = os.getenv("REDIS_KEY_PREFIX", "docsphere")
+REDIS_CACHE_TIMEOUT = int(os.getenv("REDIS_CACHE_TIMEOUT", "300"))
+REDIS_MAX_CONNECTIONS = int(os.getenv("REDIS_MAX_CONNECTIONS", "50"))
+
+if REDIS_PASSWORD:
+    REDIS_CACHE_LOCATION = os.getenv(
+        "REDIS_CACHE_LOCATION",
+        f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_CACHE_DB}",
+    )
+    DEFAULT_CELERY_BROKER_URL = (
+        f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_BROKER_DB}"
+    )
+else:
+    REDIS_CACHE_LOCATION = os.getenv(
+        "REDIS_CACHE_LOCATION",
+        f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_CACHE_DB}",
+    )
+    DEFAULT_CELERY_BROKER_URL = (
+        f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_BROKER_DB}"
+    )
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_CACHE_LOCATION,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": REDIS_MAX_CONNECTIONS,
+            },
+        },
+        "KEY_PREFIX": REDIS_KEY_PREFIX,
+        "TIMEOUT": REDIS_CACHE_TIMEOUT,
+    }
+}
+
+# ── Celery ────────────────────────────────────────────────────
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", DEFAULT_CELERY_BROKER_URL)
+CELERY_RESULT_BACKEND = "django-db"               # store results in postgres
+CELERY_CACHE_BACKEND = "django-cache"
+
+CELERY_TIMEZONE = "UTC"
+CELERY_TASK_TRACK_STARTED = True                  # track when task starts
+CELERY_TASK_TIME_LIMIT = 30 * 60                  # hard limit: 30 min
+CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60             # soft limit: 25 min (raises exception)
+
+# task serialization — always use json, never pickle in production
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_ACCEPT_CONTENT = ["json"]
+
+# beat scheduler — stores schedule in DB instead of a file
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+CELERY_BEAT_SCHEDULE = {
+    "log-active-users": {
+        "task": "core.tasks.log_active_users",
+        "schedule": crontab(minute="*"),   
+    },
+}
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = '/static/'

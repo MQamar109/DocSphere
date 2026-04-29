@@ -1,4 +1,4 @@
-from core.email_service import send_email_using_default_email
+from core.email_service import send_email
 import traceback
 
 class APIErrorAlertMiddleware:
@@ -13,7 +13,7 @@ class APIErrorAlertMiddleware:
         tb = traceback.format_exc()
 
         try:
-            status = send_email_using_default_email(
+            status = send_email(
                 to_email='mqamartech@gmail.com',
                 subject=f'500 Error on {request.path}',
                 body= 'A 500 error just happened on your API.',
