@@ -39,6 +39,50 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
 
+class UpdatePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+
+        if attrs["new_password"] != attrs["confirm_password"]:
+            raise ValidationError("New password and confirm password are not equal")
+        
+        try:
+            validate_password(attrs["new_password"])
+        except DjangoValidationError as exc:
+            raise ValidationError({"new_password": list(exc.messages)})
+                
+        return attrs
+
+
+class SetResetPasswordSerializer(serializers.Serializer):
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        if attrs["new_password"] != attrs["confirm_password"]:
+            raise ValidationError("New password and confirm password are not equal")
+        
+        try:
+            validate_password(attrs["new_password"])
+        except DjangoValidationError as exc:
+            raise ValidationError({"new_password": list(exc.messages)})
+        
+        return attrs
+
+
+class PasswordResetEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        user = User.objects.filter(email=value).first()
+        if not user or not user.is_active:
+            raise ValidationError("User not found.")
+        return value
+
+
 class StripeCheckoutSerializer(serializers.Serializer):
     organization = serializers.IntegerField()
 

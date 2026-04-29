@@ -21,7 +21,7 @@ urlpatterns = [
     path(
         '<int:pk>/',
         retrieve_partial_update_delete,
-        workname='organization_retrieve_partial_update_delete',
+        name='organization_retrieve_partial_update_delete',
     ),
     path(
         'list/',
@@ -48,4 +48,5 @@ urlpatterns = [
         OrganizationDeleteView.as_view(),
         name='organization_delete',
     ),
+    
 ]
